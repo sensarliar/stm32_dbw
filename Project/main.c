@@ -1,0 +1,81 @@
+/*******************************************************************************
+ * @name    : OLED显示实验
+ * @author  : 布谷鸟
+ * @web     : WWW.UCORTEX.COM
+ * @version : V1.0
+ * @date    : 2014-04-03
+ * @MDK     : KEIL MDK4.72a & KEL MDK 5.10
+ * @brief   : 通过4线SPI驱动OLED显示
+ * ---------------------------------------------------------------------------- 
+ * @copyright
+ *
+ * UCORTEX版权所有，违者必究！例程源码仅供大家参考，旨在交流学习和节省开发时间，
+ * 对于因为参考本文件内容，导致您的产品直接或间接受到破坏，或涉及到法律问题，作
+ * 者不承担任何责任。对于使用过程中发现的问题，如果您能在WWW.UCORTEX.COM网站反
+ * 馈给我们，我们会非常感谢，并将对问题及时研究并作出改善。例程的版本更新，将不
+ * 做特别通知，请您自行到WWW.UCORTEX.COM下载最新版本，谢谢。
+ * 对于以上声明，UCORTEX保留进一步解释的权利！
+ * ----------------------------------------------------------------------------
+ * @description
+ * 
+ * 本实验通过4线驱动OLED，在屏幕上周期性显示字符和对应的ASCII码。
+ *
+ * OLED_PWR  -> PC13 : OLED电源控制口，高电平打开电源
+ * OLED_CS   -> PB3  : OLED SPI选通
+ * OLED_RST  -> PB4  : OLED复位
+ * OLED_DC   -> PB5  : OLED 数据/命令选择口 D/C#
+ * OLED_SCLK -> PB6  : OLED SPI时钟
+ * OLED_SDIN -> PB7  : OLED SPI数据
+ *
+ *-----------------------------------------------------------------------------
+ * @history
+ * ----------------------------------------------------------------------------
+ * 更改时间：2014-04-03    更改人：布谷鸟
+ * 版本记录：V1.0
+ * 更改内容：新建
+ * ----------------------------------------------------------------------------
+ *
+ ******************************************************************************/
+#include "stm32f10x.h"
+#include "delay.h"
+#include "led.h"
+#include "key.h"
+#include "usart.h"
+#include "oled.h"
+
+/**
+  * @brief  Main program.
+  * @param  None
+  * @retval None
+  */
+int main(void)
+{
+	uint8_t t;
+	LED_Init();		//LED IO初始化
+	KEY_Init();		//按键IO初始化
+	COM_Init(COM1, 115200);//串口初始化
+	OLED_Init();	//初始化OLED
+	
+	//OLED显示提示信息
+ 	OLED_ShowString(0,0, "WWW.UCORTEX.COM");  
+ 	OLED_ShowString(0,16,"LEON @ UCORTEX");  
+ 	OLED_ShowString(0,32,"2014/03/23");  
+ 	OLED_ShowString(0,48,"ASCII:");  
+ 	OLED_ShowString(63,48,"CODE:");  
+	OLED_Refresh_Gram();
+	
+	t=' ';
+	while(1) 
+	{		
+		OLED_ShowChar(48,48,t,16,1);//显示ASCII字符	   
+		OLED_Refresh_Gram();
+		t++;
+		if(t>'~')t=' ';
+		OLED_ShowNum(103,48,t,3,16);//显示ASCII字符的码值 
+		delay_ms(300);
+		LED = !LED;
+	}	
+
+}
+
+/********************* (C) COPYRIGHT 2014 WWW.UCORTEX.COM **********END OF FILE**********/
