@@ -440,9 +440,9 @@
               <FilePath>..\..\Drives\USART\usart.c</FilePath>
             </File>
             <File>
-              <FileName>oled.c</FileName>
+              <FileName>ug25664.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Drives\OLED\oled.c</FilePath>
+              <FilePath>..\..\Drives\OLED\ug25664.c</FilePath>
             </File>
           </Files>
         </Group>

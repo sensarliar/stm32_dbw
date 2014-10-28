@@ -43,6 +43,8 @@
 #include "usart.h"
 #include "oled.h"
 
+#include "ug25664.h"
+
 /**
   * @brief  Main program.
   * @param  None
@@ -51,19 +53,56 @@
 int main(void)
 {
 	uint8_t t;
+	int i;
 	LED_Init();		//LED IO初始化
 	KEY_Init();		//按键IO初始化
 	COM_Init(COM1, 115200);//串口初始化
-	OLED_Init();	//初始化OLED
+	
+
+	Initial_ssd1325();
+		ClearLED(0);
+		for(i=0; i<2000; i++);	
+/*	
+	while(1)
+	{
+	OLED_ShowString(0,0, "WWW.UCORTEX.COM");  
+ 	OLED_ShowString(0,16,"LEON @ UCORTEX");  
+ 	OLED_ShowString(0,32,"2014/03/23");  
+ 	OLED_ShowString(0,48,"ASCII:");  
+ 	OLED_ShowString(63,48,"CODE:");  
+
+Fill();
+
+	
+	}  
+	*/
+/*		ClearLED(0);
+		for(i=0; i<2000; i++);	
+			ClearLED(7);
+		for(i=0; i<2000; i++);
+
+		ClearLED(15);
+		for(i=0; i<2000; i++);
+
+
+		Fill();
+*/
+	
+
+	//OLED_Init();	//初始化OLED
 	
 	//OLED显示提示信息
- 	OLED_ShowString(0,0, "WWW.UCORTEX.COM");  
- 	OLED_ShowString(0,16,"LEON @ UCORTEX");  
+	
+ 	OLED_ShowString(0,0, "WWW.UCORTEX.COM---gaoming,gaoming,nihao ma");  
+
+	OLED_ShowString(0,16,"LEON @ UCORTEX----nihao");  
  	OLED_ShowString(0,32,"2014/03/23");  
  	OLED_ShowString(0,48,"ASCII:");  
  	OLED_ShowString(63,48,"CODE:");  
 	OLED_Refresh_Gram();
 	
+
+
 	t=' ';
 	while(1) 
 	{		
