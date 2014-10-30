@@ -36,6 +36,9 @@
  * ----------------------------------------------------------------------------
  *
  ******************************************************************************/
+//#define STM32F1
+#define NVIC_IRQ_COUNT 0
+
 #include "stm32f10x.h"
 #include "delay.h"
 #include "led.h"
@@ -56,7 +59,7 @@ int main(void)
 	int i;
 	LED_Init();		//LED IO初始化
 	KEY_Init();		//按键IO初始化
-	COM_Init(COM1, 115200);//串口初始化
+//	COM_Init(COM1, 115200);//串口初始化
 	
 
 	Initial_ssd1325();
