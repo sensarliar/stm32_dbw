@@ -61,6 +61,17 @@ struct SVinfo {
 
 /** data structure for GPS information */
 struct GpsState {
+	char time_ch[12];
+	char lat_ch[12];
+	char lat_du_ch[12];
+	char NorS;
+	char lon_ch[12];
+	char lon_du_ch[12];
+	char EorW;
+	char alt_ch[12];
+	char date_ch[12];
+
+	
 //  struct EcefCoor_i ecef_pos;    ///< position in ECEF in cm
 //  struct LlaCoor_i lla_pos;      ///< position in LLA (lat,lon: deg*1e7; alt: mm over ellipsoid)
 //  struct UtmCoor_i utm_pos;      ///< position in UTM (north,east: cm; alt: mm over ellipsoid)
@@ -97,8 +108,8 @@ struct GpsTimeSync {
 };
 
 /** global GPS state */
-//extern struct GpsState gps;
-struct GpsState gps;
+extern struct GpsState gps;
+//struct GpsState gps;
 
 /** initialize the global GPS state */
 extern void gps_init(void);

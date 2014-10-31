@@ -46,7 +46,8 @@
 #include "ug25664.h"
 #include "uart_arch.h"
 #include "gps_nmea.h"
-
+#include "gps.h"
+struct GpsState gps;
 //#define USE_UART1 1
 
 /**
@@ -144,7 +145,7 @@ Fill();
 	//OLED_Init();	//初始化OLED
 	
 	//OLED显示提示信息
-	
+/*	
  	OLED_ShowString(0,0, "WWW.UCORTEX.COM---gaoming,gaoming,nihao ma");  
 
 	OLED_ShowString(0,16,"LEON @ UCORTEX----nihao ^_^");  
@@ -152,7 +153,7 @@ Fill();
  	OLED_ShowString(0,48,"ASCII:");  
  	OLED_ShowString(63,48,"CODE:");  
 	OLED_Refresh_Gram();
-	
+*/
 
 
 	t=' ';
@@ -166,6 +167,17 @@ Fill();
 		*/
 		
 		GpsEvent(on_gps);
+
+		OLED_ShowString(0,0,&gps.time_ch[0]);
+//		OLED_ShowString(0,0,gps.time_ch);
+		OLED_ShowString(128,0,&gps.date_ch[0]);
+		if(gps_nmea.pos_available)
+		{
+			OLED_ShowString(0,16,&gps.lat_ch[0]);
+			OLED_ShowString(0,32,&gps.lon_ch[0]);
+			OLED_ShowString(0,48,&gps.alt_ch[0]);
+		}
+
 /*	
 		if(gps_nmea.msg_available)
 		{

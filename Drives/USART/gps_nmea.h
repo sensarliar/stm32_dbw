@@ -66,7 +66,7 @@ extern struct GpsNmea gps_nmea;
     while (GpsLink(ChAvailable())&&!gps_nmea.msg_available)	\
       nmea_parse_char(GpsLink(Getch()));			\
   }
-/*
+
 #define GpsEvent(_sol_available_callback) {             \
     if (GpsBuffer()) {                                  \
       ReadGpsBuffer();                                  \
@@ -79,8 +79,8 @@ extern struct GpsNmea gps_nmea;
       gps_nmea.msg_available = FALSE;                   \
     }                                                   \
   }
-*/
 
+/*
 #define GpsEvent(_sol_available_callback) {             \
     if (GpsBuffer()) {                                  \
       ReadGpsBuffer();                                  \
@@ -95,7 +95,7 @@ extern struct GpsNmea gps_nmea;
       gps_nmea.msg_available = FALSE;                   \
     }                                                   \
   }
-
+*/
 
 /** The function to be called when a characted friom the device is available */
 extern void nmea_parse_char(uint8_t c);
