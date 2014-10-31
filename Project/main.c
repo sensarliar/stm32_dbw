@@ -52,6 +52,7 @@
   */
 int main(void)
 {
+	int len;
 	uint8_t t;
 	int i;
 	LED_Init();		//LED IO初始化
@@ -95,7 +96,7 @@ Fill();
 	
  	OLED_ShowString(0,0, "WWW.UCORTEX.COM---gaoming,gaoming,nihao ma");  
 
-	OLED_ShowString(0,16,"LEON @ UCORTEX----nihao");  
+	OLED_ShowString(0,16,"LEON @ UCORTEX----nihao ^_^");  
  	OLED_ShowString(0,32,"2014/03/23");  
  	OLED_ShowString(0,48,"ASCII:");  
  	OLED_ShowString(63,48,"CODE:");  
@@ -106,6 +107,25 @@ Fill();
 	t=' ';
 	while(1) 
 	{		
+				if(KEY_Scan(0))//检测到按键按下
+		{
+			printf("WWW.UCORTEX.COM\r\n");
+		}
+		
+		if(COM_RX_STA&0x8000)//接收到有效数据
+		{
+			len = COM_RX_STA & 0x3fff;//串口接收到的数据长度
+			for(i = 0; i < len; i++)
+			{
+				COM_RX_BUF[len]='\0';
+				OLED_ShowString(0,32,COM_RX_BUF); 
+				USART_SendData(USART1, COM_RX_BUF[i]);//串口发送一个数据
+				while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);//等待串口发送完成
+			}
+			printf("\r\n");//打印回车换行
+			COM_RX_STA = 0;//串口接收状态字清零
+		}
+		
 		OLED_ShowChar(48,48,t,16,1);//显示ASCII字符	   
 		OLED_Refresh_Gram();
 		t++;
