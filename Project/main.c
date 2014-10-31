@@ -45,6 +45,7 @@
 
 #include "ug25664.h"
 #include "uart_arch.h"
+#include "gps_nmea.h"
 
 //#define USE_UART1 1
 
@@ -61,7 +62,8 @@ static int16_t hott_msg_len = 0;
 
 uint8_t test_serial_p[43]="WWW.UCORTEX.COM---gaoming,gaoming,nihao ma";
 
-
+void on_gps(void) {
+}
 
 static void send_one_frame_data(void) {
 	
@@ -162,7 +164,15 @@ Fill();
     }     
 		
 		*/
-	
+		
+		GpsEvent(on_gps);
+/*	
+		if(gps_nmea.msg_available)
+		{
+				gps_nmea.msg_buf[gps_nmea.msg_len]='\0';
+				OLED_ShowString(0,32,gps_nmea.msg_buf); 
+		}		
+	*/
 				if(KEY_Scan(0))//检测到按键按下
 		{
 				hott_msg_len=30;
@@ -170,6 +180,7 @@ Fill();
 			send_one_frame_data();
 //			printf("WWW.UCORTEX.COM\r\n");
 		}
+
 /*			
 		if(COM_RX_STA&0x8000)//接收到有效数据
 		{

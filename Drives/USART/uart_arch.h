@@ -67,11 +67,8 @@ struct uart_periph {
 
 extern void usart1_isr(void);
 
-#define __GpsLink(dev, _x) dev##_x
-#define _GpsLink(dev, _x)  __GpsLink(dev, _x)
-#define GpsLink(_x) _GpsLink(GPS_LINK, _x)
 
-#define GpsBuffer() GpsLink(ChAvailable())
+
 
 
 extern void uart_periph_init(struct uart_periph* p);
@@ -80,7 +77,7 @@ extern void uart_periph_init(struct uart_periph* p);
 //extern void uart_periph_set_mode(struct uart_periph* p, bool_t tx_enabled, bool_t rx_enabled, bool_t hw_flow_control);
 extern void uart_transmit(struct uart_periph* p, uint8_t data);
 extern bool_t uart_check_free_space(struct uart_periph* p, uint8_t len);
-extern uint8_t uart_getch(struct uart_periph* p);
+uint8_t uart_getch(struct uart_periph* p);
 
 /**
  * Check UART for available chars in receive buffer.

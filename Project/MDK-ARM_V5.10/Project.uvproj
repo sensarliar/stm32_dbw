@@ -449,6 +449,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drives\USART\uart_arch.c</FilePath>
             </File>
+            <File>
+              <FileName>gps_nmea.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drives\USART\gps_nmea.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

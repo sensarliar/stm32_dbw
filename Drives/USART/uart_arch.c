@@ -113,6 +113,24 @@ void uart_periph_init(struct uart_periph* p) {
 }
 
 
+
+bool_t uart_check_free_space(struct uart_periph* p, uint8_t len) {
+  int16_t space = p->tx_extract_idx - p->tx_insert_idx;
+  if (space <= 0)
+    space += UART_TX_BUFFER_SIZE;
+  return (uint16_t)(space - 1) >= len;
+}
+
+uint8_t uart_getch(struct uart_periph* p) {
+  uint8_t ret = p->rx_buf[p->rx_extract_idx];
+  p->rx_extract_idx = (p->rx_extract_idx + 1) % UART_RX_BUFFER_SIZE;
+  return ret;
+}
+
+
+
+
+
 #if USE_UART1
 struct uart_periph uart1;
 
