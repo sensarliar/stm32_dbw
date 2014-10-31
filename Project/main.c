@@ -44,25 +44,74 @@
 #include "oled.h"
 
 #include "ug25664.h"
+#include "uart_arch.h"
+
+//#define USE_UART1 1
 
 /**
   * @brief  Main program.
   * @param  None
   * @retval None
   */
+	
+	// HoTT serial send buffer pointer
+static uint8_t *hott_msg_ptr = 0;
+// Len of HoTT serial buffer
+static int16_t hott_msg_len = 0;
+
+uint8_t test_serial_p[43]="WWW.UCORTEX.COM---gaoming,gaoming,nihao ma";
+
+
+
+static void send_one_frame_data(void) {
+	
+  static int16_t msg_crc = 0;
+	/*
+  if (hott_msg_len == 0) {
+    hott_msg_ptr = 0;
+//    hott_telemetry_is_sending = FALSE;
+//    hott_telemetry_sendig_msgs_id = 0;
+    msg_crc = 0;
+  }
+  else {
+    --hott_msg_len;
+    if (hott_msg_len != 0) {
+      msg_crc += *hott_msg_ptr;
+      uart_transmit(&uart1, *hott_msg_ptr++);
+    } else
+      uart_transmit(&uart1, (int8_t)msg_crc);
+  }
+	*/
+	msg_crc = 0;
+	while(hott_msg_len){
+	    --hott_msg_len;
+    if (hott_msg_len != 0) {
+      msg_crc += *hott_msg_ptr;
+      uart_transmit(&uart1, *hott_msg_ptr++);
+    } else
+      uart_transmit(&uart1, (int8_t)msg_crc);
+	}	
+	
+}
+	
+	
 int main(void)
 {
-	int len;
+//	int len;
 	uint8_t t;
 	int i;
 	LED_Init();		//LED IO初始化
 	KEY_Init();		//按键IO初始化
-	COM_Init(COM1, 115200);//串口初始化
+//	COM_Init(COM1, 115200);//串口初始化
+	uart1_init();
 	
 
 	Initial_ssd1325();
 		ClearLED(0);
 		for(i=0; i<2000; i++);	
+	
+
+	
 /*	
 	while(1)
 	{
@@ -106,12 +155,22 @@ Fill();
 
 	t=' ';
 	while(1) 
-	{		
+	{	
+/*		
+		    if (GpsBuffer()) {                                  \
+      ReadGpsBuffer();                                  \
+    }     
+		
+		*/
+	
 				if(KEY_Scan(0))//检测到按键按下
 		{
-			printf("WWW.UCORTEX.COM\r\n");
+				hott_msg_len=30;
+			hott_msg_ptr=test_serial_p;
+			send_one_frame_data();
+//			printf("WWW.UCORTEX.COM\r\n");
 		}
-		
+/*			
 		if(COM_RX_STA&0x8000)//接收到有效数据
 		{
 			len = COM_RX_STA & 0x3fff;//串口接收到的数据长度
@@ -125,7 +184,8 @@ Fill();
 			printf("\r\n");//打印回车换行
 			COM_RX_STA = 0;//串口接收状态字清零
 		}
-		
+		*/
+	
 		OLED_ShowChar(48,48,t,16,1);//显示ASCII字符	   
 		OLED_Refresh_Gram();
 		t++;
@@ -133,6 +193,7 @@ Fill();
 		OLED_ShowNum(103,48,t,3,16);//显示ASCII字符的码值 
 		delay_ms(300);
 		LED = !LED;
+		
 	}	
 
 }

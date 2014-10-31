@@ -444,6 +444,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drives\OLED\ug25664.c</FilePath>
             </File>
+            <File>
+              <FileName>uart_arch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drives\USART\uart_arch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

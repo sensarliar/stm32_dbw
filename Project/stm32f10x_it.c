@@ -24,6 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "usart.h"
+#include "uart_arch.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -164,30 +165,8 @@ void PPP_IRQHandler(void)
   */
 void USART1_IRQHandler(void)
 {
-	uint8_t data;
+usart1_isr();
 	
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)	//接收中断
-	{
-		data = USART_ReceiveData(USART1);			//读取接收到的数据
-		if((COM_RX_STA & 0x8000) == 0)				//接收未完成
-		{
-			if(COM_RX_STA & 0x4000)							//接收到了回车键
-			{
-				if(data != '\n') COM_RX_STA = 0;	//没接收到换行键，接收错误,重新开始
-				else COM_RX_STA	|=	0x8000;				//接收到换行键，接收完成了 
-			}
-			else //还没收到0x0d
-			{	
-				if(data == '\r')	COM_RX_STA	|=	0x4000;//接收到回车键
-				else
-				{
-					COM_RX_BUF[COM_RX_STA & 0x3fff]	=	data ;
-					COM_RX_STA++;
-					if(COM_RX_STA	>	(COM_RX_LEN - 1))	COM_RX_STA = 0;//缓冲溢出
-				}		 
-			}
-		} 
-	}
 }
 
 /**
