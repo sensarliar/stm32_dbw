@@ -356,14 +356,14 @@ void parse_nmea_GPGGA(void) {
  */
 void nmea_parse_msg( void ) {
 
-  if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GPRMC", 5)) {
+  if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GNRMC", 5)) {
     gps_nmea.msg_buf[gps_nmea.msg_len] = 0;
     NMEA_PRINT("parsing RMC: \"%s\" \n\r",gps_nmea.msg_buf);
     NMEA_PRINT("RMC");
     parse_nmea_GPRMC();
   }
   else {
-    if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GPGGA", 5)) {
+    if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GNGGA", 5)) {
       gps_nmea.msg_buf[gps_nmea.msg_len] = 0;
       NMEA_PRINT("parse_gps_msg() - parsing GGA gps-message \"%s\" \n\r",gps_nmea.msg_buf);
       NMEA_PRINT("GGA");

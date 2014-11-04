@@ -62,10 +62,10 @@ struct SVinfo {
 /** data structure for GPS information */
 struct GpsState {
 	char time_ch[12];
-	char lat_ch[12];
+	char lat_ch[16];
 	char lat_du_ch[12];
 	char NorS;
-	char lon_ch[12];
+	char lon_ch[16];
 	char lon_du_ch[12];
 	char EorW;
 	char alt_ch[12];

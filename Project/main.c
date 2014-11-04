@@ -154,7 +154,13 @@ Fill();
  	OLED_ShowString(63,48,"CODE:");  
 	OLED_Refresh_Gram();
 */
-
+		OLED_ShowString(0,0,"Time:");
+		OLED_ShowString(128,0,"Date:");
+		OLED_ShowString(0,16,"JD:");
+		OLED_ShowString(0,32,"WD:");
+		OLED_ShowString(0,48,"HT:");
+		OLED_ShowString(80,48,"m");
+		OLED_ShowString(128,48,"FLIGHT NUM: 007");
 
 	t=' ';
 	while(1) 
@@ -168,14 +174,22 @@ Fill();
 		
 		GpsEvent(on_gps);
 
-		OLED_ShowString(0,0,&gps.time_ch[0]);
+		OLED_ShowString(48,0,&gps.time_ch[0]);
 //		OLED_ShowString(0,0,gps.time_ch);
-		OLED_ShowString(128,0,&gps.date_ch[0]);
+
+		OLED_ShowString(176,0,&gps.date_ch[0]);
 		if(gps_nmea.pos_available)
 		{
-			OLED_ShowString(0,16,&gps.lat_ch[0]);
-			OLED_ShowString(0,32,&gps.lon_ch[0]);
-			OLED_ShowString(0,48,&gps.alt_ch[0]);
+			OLED_ShowString(32,16,&gps.lat_ch[0]);
+			OLED_ShowString(32,32,&gps.lon_ch[0]);
+			OLED_ShowString(32,48,&gps.alt_ch[0]);
+			OLED_ShowChar(128,16,gps.NorS,16,1);
+			OLED_ShowChar(136,32,gps.EorW,16,1);
+		}else
+		{
+			OLED_ShowString(32,16,"               ");
+			OLED_ShowString(32,32,"               ");
+			OLED_ShowString(32,48,"     ");
 		}
 
 /*	
@@ -208,13 +222,15 @@ Fill();
 			COM_RX_STA = 0;//串口接收状态字清零
 		}
 		*/
-	
+/*
 		OLED_ShowChar(48,48,t,16,1);//显示ASCII字符	   
 		OLED_Refresh_Gram();
 		t++;
 		if(t>'~')t=' ';
 		OLED_ShowNum(103,48,t,3,16);//显示ASCII字符的码值 
 		delay_ms(300);
+*/
+		OLED_Refresh_Gram();
 		LED = !LED;
 		
 	}	
