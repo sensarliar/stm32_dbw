@@ -52,7 +52,7 @@ struct GpsNmea {
 
 extern struct GpsNmea gps_nmea;
 
-#define GPS_LINK UART1
+#define GPS_LINK UART2
 /*
  * This part is used by the autopilot to read data from a uart
  */

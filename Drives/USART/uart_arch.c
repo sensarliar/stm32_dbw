@@ -11,7 +11,8 @@
 // #include "stm32f10x.h"
 #include "usart.h"
  
- #define USE_UART1 1
+// #define USE_UART1 1
+// #define USE_UART2 1
  
  
  void usart_send(uint32_t usart, uint8_t data)
@@ -139,7 +140,7 @@ void uart1_init( void ) {
   uart_periph_init(&uart1);
   uart1.reg_addr = (void *)USART1;
 //	COM_Init(COM1, 115200);//串口初始化
-	COM_Init(COM1, 9600);//串口初始化
+	COM_Init(COM1, 115200);//串口初始化
 	
 }
 
@@ -150,61 +151,13 @@ void usart1_isr(void) { usart_isr(&uart1); }
 
 #if USE_UART2
 
-/* by default enable UART Tx and Rx */
-#ifndef USE_UART2_TX
-#define USE_UART2_TX TRUE
-#endif
-#ifndef USE_UART2_RX
-#define USE_UART2_RX TRUE
-#endif
-
-#ifndef UART2_HW_FLOW_CONTROL
-#define UART2_HW_FLOW_CONTROL FALSE
-#endif
-
-#ifndef UART2_BITS
-#define UART2_BITS UBITS_8
-#endif
-
-#ifndef UART2_STOP
-#define UART2_STOP USTOP_1
-#endif
-
-#ifndef UART2_PARITY
-#define UART2_PARITY UPARITY_NO
-#endif
+struct uart_periph uart2;
 
 void uart2_init( void ) {
 
   uart_periph_init(&uart2);
   uart2.reg_addr = (void *)USART2;
-
-  /* init RCC and GPIOs */
-  rcc_periph_clock_enable(RCC_USART2);
-
-#if USE_UART2_TX
-  gpio_setup_pin_af(UART2_GPIO_PORT_TX, UART2_GPIO_TX, UART2_GPIO_AF, TRUE);
-#endif
-#if USE_UART2_RX
-  gpio_setup_pin_af(UART2_GPIO_PORT_RX, UART2_GPIO_RX, UART2_GPIO_AF, FALSE);
-#endif
-
-  /* Enable USART interrupts in the interrupt controller */
-  usart_enable_irq(NVIC_USART2_IRQ);
-
-#if UART2_HW_FLOW_CONTROL && defined(STM32F4)
-#warning "USING UART2 FLOW CONTROL. Make sure to pull down CTS if you are not connecting any flow-control-capable hardware."
-  /* setup CTS and RTS pins */
-  gpio_setup_pin_af(UART2_GPIO_PORT_CTS, UART2_GPIO_CTS, UART2_GPIO_AF, FALSE);
-  gpio_setup_pin_af(UART2_GPIO_PORT_RTS, UART2_GPIO_RTS, UART2_GPIO_AF, TRUE);
-#endif
-
-  /* Configure USART Tx,Rx, and hardware flow control*/
-  uart_periph_set_mode(&uart2, USE_UART2_TX, USE_UART2_RX, UART2_HW_FLOW_CONTROL);
-
-  /* Configure USART */
-  uart_periph_set_bits_stop_parity(&uart2, UART2_BITS, UART2_STOP, UART2_PARITY);
-  uart_periph_set_baudrate(&uart2, UART2_BAUD);
+	COM_Init(COM2, 9600);//串口初始化
 }
 
 void usart2_isr(void) { usart_isr(&uart2); }

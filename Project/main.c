@@ -107,6 +107,7 @@ int main(void)
 	KEY_Init();		//按键IO初始化
 //	COM_Init(COM1, 115200);//串口初始化
 	uart1_init();
+	uart2_init();
 	
 
 	Initial_ssd1325();

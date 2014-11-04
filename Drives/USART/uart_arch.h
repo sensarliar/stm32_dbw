@@ -34,6 +34,7 @@
 //#include "std.h"
 
 #define USE_UART1 1
+#define USE_UART2 1
 
 
 #define UART_RX_BUFFER_SIZE 128
@@ -66,6 +67,7 @@ struct uart_periph {
 };
 
 extern void usart1_isr(void);
+extern void usart2_isr(void);
 
 
 
