@@ -55,13 +55,85 @@ struct GpsState gps;
   * @param  None
   * @retval None
   */
-	
+#define DBW_LINK UART1
 	// HoTT serial send buffer pointer
 static uint8_t *hott_msg_ptr = 0;
 // Len of HoTT serial buffer
 static int16_t hott_msg_len = 0;
 
-uint8_t test_serial_p[43]="WWW.UCORTEX.COM---gaoming,gaoming,nihao ma";
+//uint8_t MSG_TO_SEND[43]="WWW.UCORTEX.COM---gaoming,gaoming,nihao ma";
+uint8_t INFO_HEAD[6]="$TXSQ";   //5B
+uint8_t INFO_LEN[2]={0x33,0x34};  //2B
+uint8_t INFO_ADDR[4]={0x04,0xE6,0x10};//321040  addr 3B
+//uint8_t MSG_TX_FLAG=0B01000110;     //1B
+uint8_t MSG_TX_FLAG=0x46;     //1B
+uint8_t MSG_TX_ADDR[4]={0x04,0xE6,0x10};//321040  TX addr   //3B
+uint8_t MSG_TX_LEN[2]={0x00,0x00};      //2B
+uint8_t MSG_TX_ACK=0x00;               //1B
+uint8_t MSG_TX[211]="gaoming";    //1680bit maxium   NON-MIL 628BIT  78B   17B+MSG +1CRC
+uint16_t msg_num=3+9+11+12+5+6+1+1;
+
+uint8_t flight_num_char[5]="007";
+
+uint8_t ALL_HEAD[18];
+
+void fill_msg(void){
+		  int i,j;
+			for(i=0,j=0; i<3; i++,j++){
+			MSG_TX[i]=flight_num_char[j];
+			}
+			for(j=0; j<9; i++,j++){
+			MSG_TX[i]=gps.time_ch[j];
+			}
+			for(j=0; j<11; i++,j++){
+			MSG_TX[i]=gps.lat_ch[j];
+			}
+			MSG_TX[i]=gps.NorS;
+			i++;
+			for(j=0; j<12; i++,j++){
+			MSG_TX[i]=gps.lon_ch[j];
+			}
+			MSG_TX[i]=gps.EorW;
+			i++;
+			for(j=0; j<5; i++,j++){
+			MSG_TX[i]=gps.alt_ch[j];
+			}
+			for(j=0; j<6; i++,j++){
+			MSG_TX[i]=gps.date_ch[j];
+			}
+			///bytes num =3+9+11+12+5+6+1+1
+}
+
+void init_msg_head(void){
+	    int i,j;
+			for(i=0,j=0; i<5; i++,j++){
+			ALL_HEAD[i]=INFO_HEAD[j];
+			}
+			for(j=0; j<2; i++,j++){
+			ALL_HEAD[i]=INFO_LEN[j];
+			}
+			for(j=0; j<3; i++,j++){
+			ALL_HEAD[i]=INFO_ADDR[j];
+			}
+
+			ALL_HEAD[i]=MSG_TX_FLAG;
+			i++;
+//			ALL_HEAD[i]=0x46;
+
+			for(j=0; j<3; i++,j++){
+			ALL_HEAD[i]=MSG_TX_ADDR[j];
+			}			
+			for(j=0; j<2; i++,j++){
+			ALL_HEAD[i]=MSG_TX_LEN[j];
+			}	
+		
+			ALL_HEAD[i]=MSG_TX_ACK;
+			i++;	
+			ALL_HEAD[i]=0xa4;
+			i++;	
+			
+}
+
 
 void on_gps(void) {
 }
@@ -69,6 +141,8 @@ void on_gps(void) {
 static void send_one_frame_data(void) {
 	
   static int16_t msg_crc = 0;
+	int16_t init_len;
+
 	/*
   if (hott_msg_len == 0) {
     hott_msg_ptr = 0;
@@ -86,11 +160,18 @@ static void send_one_frame_data(void) {
   }
 	*/
 	msg_crc = 0;
+	init_len=hott_msg_len;
 	while(hott_msg_len){
 	    --hott_msg_len;
     if (hott_msg_len != 0) {
-      msg_crc += *hott_msg_ptr;
+			if(hott_msg_len == init_len-19)
+			{hott_msg_ptr = MSG_TX;}
+			
+//      msg_crc = msg_crc  *hott_msg_ptr;
+			msg_crc ^= *hott_msg_ptr;
+
       uart_transmit(&uart1, *hott_msg_ptr++);
+				
     } else
       uart_transmit(&uart1, (int8_t)msg_crc);
 	}	
@@ -115,46 +196,6 @@ int main(void)
 		for(i=0; i<2000; i++);	
 	
 
-	
-/*	
-	while(1)
-	{
-	OLED_ShowString(0,0, "WWW.UCORTEX.COM");  
- 	OLED_ShowString(0,16,"LEON @ UCORTEX");  
- 	OLED_ShowString(0,32,"2014/03/23");  
- 	OLED_ShowString(0,48,"ASCII:");  
- 	OLED_ShowString(63,48,"CODE:");  
-
-Fill();
-
-	
-	}  
-	*/
-/*		ClearLED(0);
-		for(i=0; i<2000; i++);	
-			ClearLED(7);
-		for(i=0; i<2000; i++);
-
-		ClearLED(15);
-		for(i=0; i<2000; i++);
-
-
-		Fill();
-*/
-	
-
-	//OLED_Init();	//初始化OLED
-	
-	//OLED显示提示信息
-/*	
- 	OLED_ShowString(0,0, "WWW.UCORTEX.COM---gaoming,gaoming,nihao ma");  
-
-	OLED_ShowString(0,16,"LEON @ UCORTEX----nihao ^_^");  
- 	OLED_ShowString(0,32,"2014/03/23");  
- 	OLED_ShowString(0,48,"ASCII:");  
- 	OLED_ShowString(63,48,"CODE:");  
-	OLED_Refresh_Gram();
-*/
 		OLED_ShowString(0,0,"Time:");
 		OLED_ShowString(128,0,"Date:");
 		OLED_ShowString(0,16,"JD:");
@@ -202,8 +243,16 @@ Fill();
 	*/
 				if(KEY_Scan(0))//检测到按键按下
 		{
-				hott_msg_len=30;
-			hott_msg_ptr=test_serial_p;
+
+				hott_msg_len=17+1+msg_num+1;
+			  INFO_LEN[1]=(char)(hott_msg_len);
+//  			INFO_LEN[1]=(char)*(hott_msg_len&0xFF00);
+			INFO_LEN[0]= hott_msg_len>>8;
+			MSG_TX_LEN[1]=(msg_num+1)*8;
+			MSG_TX_LEN[0]=(uint16_t)(msg_num+1)*8 >> 8;
+				init_msg_head();
+			fill_msg();
+			hott_msg_ptr=ALL_HEAD;
 			send_one_frame_data();
 //			printf("WWW.UCORTEX.COM\r\n");
 		}
