@@ -25,6 +25,7 @@
 #include "stm32f10x_it.h"
 #include "usart.h"
 #include "uart_arch.h"
+#include "led.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -194,6 +195,34 @@ void USART3_IRQHandler(void)
 		USART_SendData(USART3, Res);			//将接收到的数据发送出去  		 
 	}
 }
+
+/**
+  * @brief  定时器3中断服务程序
+  * @param  None
+  * @retval None
+  */
+uint8_t timer_60s_flag=0;
+uint8_t timer_60s_num=0;
+
+void TIM3_IRQHandler(void)   //TIM3中断
+{  
+	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) //检查TIM3更新中断发生与否
+	{
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update  ); //清除TIM3更新中断标志 
+		timer_60s_num++;
+		if(2<=timer_60s_num)
+		{LED=!LED;
+			timer_60s_num=0;
+			timer_60s_flag=1;
+		}
+		
+	}
+}
+
+
+
+
+
 
 /**
   * @}

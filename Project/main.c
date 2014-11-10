@@ -42,6 +42,7 @@
 #include "key.h"
 #include "usart.h"
 #include "oled.h"
+#include "timer.h"
 
 #include "ug25664.h"
 #include "uart_arch.h"
@@ -49,6 +50,7 @@
 #include "gps.h"
 struct GpsState gps;
 //#define USE_UART1 1
+extern uint8_t timer_60s_flag;
 
 /**
   * @brief  Main program.
@@ -76,6 +78,8 @@ uint16_t msg_num=3+9+11+12+5+6+1+1;
 uint8_t flight_num_char[5]="007";
 
 uint8_t ALL_HEAD[18];
+		uint8_t	timer_flag1=0;
+		uint8_t	timer_flag2=0;
 
 void fill_msg(void){
 		  int i,j;
@@ -189,6 +193,8 @@ int main(void)
 //	COM_Init(COM1, 115200);//串口初始化
 	uart1_init();
 	uart2_init();
+//	TIM3_INT_Init(59999, 35999);
+	TIM3_INT_Init(59999, 57599);
 	
 
 	Initial_ssd1325();
@@ -233,6 +239,14 @@ int main(void)
 			OLED_ShowString(32,32,"               ");
 			OLED_ShowString(32,48,"     ");
 		}
+if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='4'))
+{
+	timer_flag1=1;
+}
+if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='5'))
+{
+	timer_flag2=1;
+}
 
 /*	
 		if(gps_nmea.msg_available)
@@ -241,9 +255,13 @@ int main(void)
 				OLED_ShowString(0,32,gps_nmea.msg_buf); 
 		}		
 	*/
-				if(KEY_Scan(0))//检测到按键按下
+//				if(KEY_Scan(0))//检测到按键按下
+//		if(timer_60s_flag)
+//		if(timer_60s_flag)
+	if((timer_flag1==1)&&(timer_flag2==1))
 		{
-
+			timer_flag1=0;
+			timer_flag2=0;
 				hott_msg_len=17+1+msg_num+1;
 			  INFO_LEN[1]=(char)(hott_msg_len);
 //  			INFO_LEN[1]=(char)*(hott_msg_len&0xFF00);
@@ -254,6 +272,8 @@ int main(void)
 			fill_msg();
 			hott_msg_ptr=ALL_HEAD;
 			send_one_frame_data();
+			timer_60s_flag=0;
+
 //			printf("WWW.UCORTEX.COM\r\n");
 		}
 
@@ -281,7 +301,7 @@ int main(void)
 		delay_ms(300);
 */
 		OLED_Refresh_Gram();
-		LED = !LED;
+//		LED = !LED;
 		
 	}	
 
