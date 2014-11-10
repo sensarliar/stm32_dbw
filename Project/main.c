@@ -78,8 +78,10 @@ uint16_t msg_num=3+9+11+12+5+6+1+1;
 uint8_t flight_num_char[5]="007";
 
 uint8_t ALL_HEAD[18];
-		uint8_t	timer_flag1=0;
-		uint8_t	timer_flag2=0;
+uint8_t	timer_flag1=0;
+uint8_t	timer_flag2=0;
+uint8_t sec_num_temp = 0;
+uint8_t sec_cmp_base = 0x11;
 
 void fill_msg(void){
 		  int i,j;
@@ -144,8 +146,9 @@ void on_gps(void) {
 
 static void send_one_frame_data(void) {
 	
-  static int16_t msg_crc = 0;
+  static int8_t msg_crc = 0;
 	int16_t init_len;
+	uint8_t temp;
 
 	/*
   if (hott_msg_len == 0) {
@@ -179,6 +182,10 @@ static void send_one_frame_data(void) {
     } else
       uart_transmit(&uart1, (int8_t)msg_crc);
 	}	
+	temp=0x0d;
+	uart_transmit(&uart1, temp);
+	temp=0x0a;
+	uart_transmit(&uart1, temp);
 	
 }
 	
@@ -194,7 +201,7 @@ int main(void)
 	uart1_init();
 	uart2_init();
 //	TIM3_INT_Init(59999, 35999);
-	TIM3_INT_Init(59999, 57599);
+//	TIM3_INT_Init(59999, 57599);
 	
 
 	Initial_ssd1325();
@@ -239,7 +246,46 @@ int main(void)
 			OLED_ShowString(32,32,"               ");
 			OLED_ShowString(32,48,"     ");
 		}
-if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='4'))
+		
+		
+//if(('6'>=gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5]>='0'))///bug
+if(('6'>=gps.time_ch[4])&&(gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5])&&(gps.time_ch[5]>='0'))
+{
+	sec_num_temp = (gps.time_ch[4]-'0')*10+(gps.time_ch[5]-'0');
+}else
+{
+		sec_num_temp = 0;
+}
+
+
+
+	
+if(sec_num_temp == sec_cmp_base%60)
+//if(sec_num_temp == sec_cmp_base)
+{
+	timer_flag1=0;
+	timer_flag2=0;
+}
+
+		if(sec_num_temp == (sec_cmp_base+2)%60)
+//if(sec_num_temp == (sec_cmp_base+2))
+{
+	timer_flag1=1;
+}
+if(sec_num_temp == (sec_cmp_base+4)%60)
+//		if(sec_num_temp == (sec_cmp_base+10))
+{
+	timer_flag2=1;
+}
+
+/*
+if((gps.time_ch[4]=='2')&&(gps.time_ch[5]=='8'))
+{
+	timer_flag1=0;
+	timer_flag2=0;
+}
+
+if((gps.time_ch[4]=='3')&&(gps.time_ch[5]=='0'))
 {
 	timer_flag1=1;
 }
@@ -247,7 +293,7 @@ if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='5'))
 {
 	timer_flag2=1;
 }
-
+*/
 /*	
 		if(gps_nmea.msg_available)
 		{
@@ -258,10 +304,9 @@ if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='5'))
 //				if(KEY_Scan(0))//检测到按键按下
 //		if(timer_60s_flag)
 //		if(timer_60s_flag)
-	if((timer_flag1==1)&&(timer_flag2==1))
+	if(gps_nmea.pos_available&&(timer_flag1==1)&&(timer_flag2==1))
 		{
-			timer_flag1=0;
-			timer_flag2=0;
+
 				hott_msg_len=17+1+msg_num+1;
 			  INFO_LEN[1]=(char)(hott_msg_len);
 //  			INFO_LEN[1]=(char)*(hott_msg_len&0xFF00);
@@ -273,6 +318,10 @@ if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='5'))
 			hott_msg_ptr=ALL_HEAD;
 			send_one_frame_data();
 			timer_60s_flag=0;
+			
+			sec_cmp_base+=1;
+			timer_flag1=0;
+			timer_flag2=0;
 
 //			printf("WWW.UCORTEX.COM\r\n");
 		}
