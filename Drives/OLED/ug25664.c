@@ -104,7 +104,8 @@ void OLED_ClearChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size,uint8_t mode)
   * @retval none
   * @note ÓÃ16×ÖÌå
   */
-void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p)
+//void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p)
+void OLED_ShowString(uint8_t x,uint8_t y,const char *p)
 {
 //#define MAX_CHAR_POSX 122
 #define MAX_CHAR_POSX 250

@@ -167,62 +167,16 @@ void usart2_isr(void) { usart_isr(&uart2); }
 
 #if USE_UART3
 
-/* by default enable UART Tx and Rx */
-#ifndef USE_UART3_TX
-#define USE_UART3_TX TRUE
-#endif
-#ifndef USE_UART3_RX
-#define USE_UART3_RX TRUE
-#endif
-
-#ifndef UART3_HW_FLOW_CONTROL
-#define UART3_HW_FLOW_CONTROL FALSE
-#endif
-
-#ifndef UART3_BITS
-#define UART3_BITS UBITS_8
-#endif
-
-#ifndef UART3_STOP
-#define UART3_STOP USTOP_1
-#endif
-
-#ifndef UART3_PARITY
-#define UART3_PARITY UPARITY_NO
-#endif
+struct uart_periph uart3;
 
 void uart3_init( void ) {
 
   uart_periph_init(&uart3);
   uart3.reg_addr = (void *)USART3;
-
-  /* init RCC */
-  rcc_periph_clock_enable(RCC_USART3);
-
-#if USE_UART3_TX
-  gpio_setup_pin_af(UART3_GPIO_PORT_TX, UART3_GPIO_TX, UART3_GPIO_AF, TRUE);
-#endif
-#if USE_UART3_RX
-  gpio_setup_pin_af(UART3_GPIO_PORT_RX, UART3_GPIO_RX, UART3_GPIO_AF, FALSE);
-#endif
-
-  /* Enable USART interrupts in the interrupt controller */
-  usart_enable_irq(NVIC_USART3_IRQ);
-
-#if UART3_HW_FLOW_CONTROL && defined(STM32F4)
-#warning "USING UART3 FLOW CONTROL. Make sure to pull down CTS if you are not connecting any flow-control-capable hardware."
-  /* setup CTS and RTS pins */
-  gpio_setup_pin_af(UART3_GPIO_PORT_CTS, UART3_GPIO_CTS, UART3_GPIO_AF, FALSE);
-  gpio_setup_pin_af(UART3_GPIO_PORT_RTS, UART3_GPIO_RTS, UART3_GPIO_AF, TRUE);
-#endif
-
-  /* Configure USART Tx,Rx, and hardware flow control*/
-  uart_periph_set_mode(&uart3, USE_UART3_TX, USE_UART3_RX, UART3_HW_FLOW_CONTROL);
-
-  /* Configure USART */
-  uart_periph_set_bits_stop_parity(&uart3, UART3_BITS, UART3_STOP, UART3_PARITY);
-  uart_periph_set_baudrate(&uart3, UART3_BAUD);
+	COM_Init(COM3, 115200);//´®¿Ú³õÊ¼»¯
 }
+
+
 
 void usart3_isr(void) { usart_isr(&uart3); }
 

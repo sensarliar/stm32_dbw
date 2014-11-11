@@ -187,13 +187,7 @@ usart2_isr();
   */
 void USART3_IRQHandler(void)
 {
-	uint8_t Res;
-	
-	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)	//接收中断
-	{
-		Res = USART_ReceiveData(USART3);	//读取接收到的数据
-		USART_SendData(USART3, Res);			//将接收到的数据发送出去  		 
-	}
+usart3_isr();
 }
 
 /**

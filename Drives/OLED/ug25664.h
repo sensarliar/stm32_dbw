@@ -32,7 +32,8 @@ void OLED_DrawPoint(uint8_t x,uint8_t y,uint8_t dot);
 void OLED_Fill(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t dot);
 void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size,uint8_t mode);
 void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size);
-void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p);
+//void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p);
+void OLED_ShowString(uint8_t x,uint8_t y,const char *p);
 void OLED_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);
 
 //#define OLED_PWR			//OLED电源控制IO，高电平打开电源
