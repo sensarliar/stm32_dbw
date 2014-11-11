@@ -81,7 +81,7 @@ uint8_t ALL_HEAD[18];
 uint8_t	timer_flag1=0;
 uint8_t	timer_flag2=0;
 uint8_t sec_num_temp = 0;
-uint8_t sec_cmp_base = 0x11;
+uint8_t sec_cmp_base = 33;
 
 void fill_msg(void){
 		  int i,j;
@@ -247,36 +247,35 @@ int main(void)
 			OLED_ShowString(32,48,"     ");
 		}
 		
-		
-//if(('6'>=gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5]>='0'))///bug
-if(('6'>=gps.time_ch[4])&&(gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5])&&(gps.time_ch[5]>='0'))
-{
-	sec_num_temp = (gps.time_ch[4]-'0')*10+(gps.time_ch[5]-'0');
-}else
-{
-		sec_num_temp = 0;
-}
+		if(gps_nmea.pos_available)
+		{
+			//if(('6'>=gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5]>='0'))///bug
+			if(('6'>=gps.time_ch[4])&&(gps.time_ch[4]>='0')&&('9'>=gps.time_ch[5])&&(gps.time_ch[5]>='0'))
+			{
+				sec_num_temp = (gps.time_ch[4]-'0')*10+(gps.time_ch[5]-'0');
+			}else
+			{
+					sec_num_temp = 0;
+			}
+				
+			if(sec_num_temp == sec_cmp_base%60)
+			//if(sec_num_temp == sec_cmp_base)
+			{
+				timer_flag1=0;
+				timer_flag2=0;
+			}
 
-
-
-	
-if(sec_num_temp == sec_cmp_base%60)
-//if(sec_num_temp == sec_cmp_base)
-{
-	timer_flag1=0;
-	timer_flag2=0;
-}
-
-		if(sec_num_temp == (sec_cmp_base+2)%60)
-//if(sec_num_temp == (sec_cmp_base+2))
-{
-	timer_flag1=1;
-}
-if(sec_num_temp == (sec_cmp_base+4)%60)
-//		if(sec_num_temp == (sec_cmp_base+10))
-{
-	timer_flag2=1;
-}
+					if(sec_num_temp == (sec_cmp_base+2)%60)
+			//if(sec_num_temp == (sec_cmp_base+2))
+			{
+				timer_flag1=1;
+			}
+			if(sec_num_temp == (sec_cmp_base+4)%60)
+			//		if(sec_num_temp == (sec_cmp_base+10))
+			{
+				timer_flag2=1;
+			}
+		}
 
 /*
 if((gps.time_ch[4]=='2')&&(gps.time_ch[5]=='8'))
@@ -307,9 +306,9 @@ if((gps.time_ch[4]=='5')&&(gps.time_ch[5]=='5'))
 	if(gps_nmea.pos_available&&(timer_flag1==1)&&(timer_flag2==1))
 		{
 
-				hott_msg_len=17+1+msg_num+1;
-			  INFO_LEN[1]=(char)(hott_msg_len);
-//  			INFO_LEN[1]=(char)*(hott_msg_len&0xFF00);
+			hott_msg_len=17+1+msg_num+1;
+			INFO_LEN[1]=(char)(hott_msg_len);
+//  	INFO_LEN[1]=(char)*(hott_msg_len&0xFF00);
 			INFO_LEN[0]= hott_msg_len>>8;
 			MSG_TX_LEN[1]=(msg_num+1)*8;
 			MSG_TX_LEN[0]=(uint16_t)(msg_num+1)*8 >> 8;
