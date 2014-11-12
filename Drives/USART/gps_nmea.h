@@ -101,6 +101,7 @@ extern struct GpsNmea gps_nmea;
 extern void nmea_parse_char(uint8_t c);
 
 extern void nmea_parse_msg(void);
+extern void trans_disp_format(void);
 
 
 #define gps_nmea_Reset(_val) { }

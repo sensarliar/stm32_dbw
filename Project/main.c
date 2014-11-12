@@ -55,7 +55,7 @@ int main(void)
 	
 
 		OLED_ShowString(0,0,"Time:");
-		OLED_ShowString(128,0,"Date:");
+		OLED_ShowString(136,0,"Date:");
 		OLED_ShowString(0,16,"JD:");
 		OLED_ShowString(0,32,"WD:");
 		OLED_ShowString(0,48,"HT:");
@@ -79,29 +79,6 @@ int main(void)
 		GpsEvent(on_gps);
 		PlaneInfoEvent();
 
-		OLED_ShowString(48,0,&gps.time_ch[0]);
-//		OLED_ShowString(0,0,gps.time_ch);
-
-		OLED_ShowString(176,0,&gps.date_ch[0]);
-		gps.info_flag1=(plane_info_flag&0x0f)+'0';
-		gps.info_flag2=((plane_info_flag&0xf0)>>4)+'0';
-//		OLED_ShowString(216,32,&gps.lon_ch[0]);
-		OLED_ShowChar(200,16,gps.info_flag1,16,1);
-		OLED_ShowChar(216,16,gps.info_flag2,16,1);
-		
-		if(gps_nmea.pos_available)
-		{
-			OLED_ShowString(32,16,&gps.lat_ch[0]);
-			OLED_ShowString(32,32,&gps.lon_ch[0]);
-			OLED_ShowString(32,48,&gps.alt_ch[0]);
-			OLED_ShowChar(128,16,gps.NorS,16,1);
-			OLED_ShowChar(136,32,gps.EorW,16,1);
-		}else
-		{
-			OLED_ShowString(32,16,"               ");
-			OLED_ShowString(32,32,"               ");
-			OLED_ShowString(32,48,"     ");
-		}
 		
 		if(gps_nmea.pos_available)
 		{
@@ -155,7 +132,31 @@ int main(void)
 
 		}
 
+		trans_disp_format();
 
+		OLED_ShowString(40,0,&gps.time_disp[0]);
+//		OLED_ShowString(0,0,gps.time_ch);
+
+		OLED_ShowString(176,0,&gps.date_disp[0]);
+		gps.info_flag1=(plane_info_flag&0x0f)+'0';
+		gps.info_flag2=((plane_info_flag&0xf0)>>4)+'0';
+//		OLED_ShowString(216,32,&gps.lon_ch[0]);
+		OLED_ShowChar(200,16,gps.info_flag1,16,1);
+		OLED_ShowChar(216,16,gps.info_flag2,16,1);
+		
+		if(gps_nmea.pos_available)
+		{
+			OLED_ShowString(32,16,&gps.lat_ch[0]);
+			OLED_ShowString(32,32,&gps.lon_ch[0]);
+			OLED_ShowString(32,48,&gps.alt_ch[0]);
+			OLED_ShowChar(128,16,gps.NorS,16,1);
+			OLED_ShowChar(136,32,gps.EorW,16,1);
+		}else
+		{
+			OLED_ShowString(32,16,"               ");
+			OLED_ShowString(32,32,"               ");
+			OLED_ShowString(32,48,"     ");
+		}
 
 		OLED_Refresh_Gram();
 //		LED = !LED;

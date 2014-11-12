@@ -2,6 +2,7 @@
 #include "gps.h"
 #include "usart.h"
 #include "uart_arch.h"
+#include "plane_info.h"
 
 #define DBW_LINK UART1
 	// HoTT serial send buffer pointer
@@ -19,7 +20,7 @@ uint8_t MSG_TX_ADDR[4]={0x04,0xE6,0x10};//321040  TX addr   //3B
 uint8_t MSG_TX_LEN[2]={0x00,0x00};      //2B
 uint8_t MSG_TX_ACK=0x00;               //1B
 uint8_t MSG_TX[211]="gaoming";    //1680bit maxium   NON-MIL 628BIT  78B   17B+MSG +1CRC
-uint16_t msg_num=3+9+11+12+5+6+1+1;
+uint16_t msg_num=3+1+9+11+12+5+6+1+1;
 
 uint8_t flight_num_char[5]="007";
 
@@ -32,6 +33,8 @@ void fill_msg(void){
 			for(i=0,j=0; i<3; i++,j++){
 			MSG_TX[i]=flight_num_char[j];
 			}
+			MSG_TX[i]=plane_info_flag;
+			i++;
 			for(j=0; j<9; i++,j++){
 			MSG_TX[i]=gps.time_ch[j];
 			}
@@ -51,7 +54,7 @@ void fill_msg(void){
 			for(j=0; j<6; i++,j++){
 			MSG_TX[i]=gps.date_ch[j];
 			}
-			///bytes num =3+9+11+12+5+6+1+1
+			///bytes num =3+1+9+11+12+5+6+1+1
 }
 
 void init_msg_head(void){

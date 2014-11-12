@@ -23,7 +23,7 @@
 
 
 struct PlaneInfo plane_info;
-uint8_t plane_info_flag = 0x00;
+uint8_t plane_info_flag = 0x39;
 
 
 

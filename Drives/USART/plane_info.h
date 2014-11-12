@@ -19,7 +19,7 @@
 #define NMEA_PRINT(...) {};
 #endif
 
-#define BD_MAXLEN 127
+#define BD_MAXLEN 255
 
 struct PlaneInfo {
   bool_t msg_available;

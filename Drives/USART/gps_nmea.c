@@ -416,3 +416,43 @@ void nmea_parse_char( uint8_t c ) {
   if (gps_nmea.msg_len >= NMEA_MAXLEN - 1)
     gps_nmea.msg_available = TRUE;
 }
+
+void trans_disp_format(void)
+{
+	uint8_t hour_temp=0;
+	if((gps.time_ch[0]>='0')&&(gps.time_ch[0]<='9')&&(gps.time_ch[1]>='0')&&(gps.time_ch[1]<='9'))
+	{
+		hour_temp = (gps.time_ch[0]-'0')*10+(gps.time_ch[1]-'0');
+		hour_temp += 8;
+		if(hour_temp>=24)
+		{
+			hour_temp %=24;
+		}
+		gps.time_disp[0] = (hour_temp/10) + '0';
+		gps.time_disp[1] = (hour_temp%10) + '0';
+		gps.time_disp[2] = ':';
+		gps.time_disp[3] = gps.time_ch[2];
+		gps.time_disp[4] = gps.time_ch[3];
+		gps.time_disp[5] = ':';
+		gps.time_disp[6] = gps.time_ch[4];
+		gps.time_disp[7] = gps.time_ch[5];
+
+		gps.time_disp[8] = gps.time_ch[6];
+		gps.time_disp[9] = gps.time_ch[7];
+		
+		gps.time_disp[10] = gps.time_ch[8];
+		gps.time_disp[11] = '\0';;
+	}
+
+	gps.date_disp[0] = '2';
+	gps.date_disp[1] = '0';
+	gps.date_disp[2] = gps.date_ch[4];
+	gps.date_disp[3] = gps.date_ch[5];
+	gps.date_disp[4] = '.';
+	gps.date_disp[5] = gps.date_ch[2];
+	gps.date_disp[6] = gps.date_ch[3];
+	gps.date_disp[7] = '.';
+	gps.date_disp[8] = gps.date_ch[0];
+	gps.date_disp[9] = gps.date_ch[1];
+  gps.date_disp[10] = '\0';
+}
