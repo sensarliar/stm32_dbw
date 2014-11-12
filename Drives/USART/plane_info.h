@@ -19,13 +19,13 @@
 #define NMEA_PRINT(...) {};
 #endif
 
-#define NMEA_MAXLEN 255
+#define BD_MAXLEN 127
 
 struct PlaneInfo {
   bool_t msg_available;
 //  bool_t pos_available;
 //  uint8_t gps_nb_ovrn;        // number if incomplete nmea-messages
-  char msg_buf[NMEA_MAXLEN];  ///< buffer for storing one nmea-line
+  char msg_buf[BD_MAXLEN];  ///< buffer for storing one nmea-line
   int msg_len;
 };
 
@@ -45,7 +45,7 @@ extern uint8_t plane_info_flag;
 
 #define ReadPlaneInfoBuffer() {					\
     while (PlaneInfoLink(ChAvailable())&&!plane_info.msg_available)	\
-      plane_info_parse_char(GpsLink(Getch()));			\
+      plane_info_parse_char(PlaneInfoLink(Getch()));			\
   }
 /*
 #define PlaneInfoEvent(_sol_available_callback) {             \
@@ -68,7 +68,7 @@ extern uint8_t plane_info_flag;
       plane_info_parse_msg();                                 \
       plane_info.msg_available = FALSE;                   \
     }                                                   \
-	}	
+}	
 	
 /** The function to be called when a characted friom the device is available */
 extern void plane_info_parse_char(uint8_t c);

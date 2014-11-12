@@ -61,7 +61,7 @@ int main(void)
 		OLED_ShowString(0,48,"HT:");
 		OLED_ShowString(80,48,"m");
 		OLED_ShowString(128,48,"FLIGHT NUM: 007");
-		OLED_ShowString(160,32,"P_I:");
+		OLED_ShowString(160,16,"P_I:");
 		
 		gps_impl_init();
 		plane_info_impl_init();
@@ -77,7 +77,7 @@ int main(void)
 		*/
 		
 		GpsEvent(on_gps);
-//		PlaneInfoEvent();
+		PlaneInfoEvent();
 
 		OLED_ShowString(48,0,&gps.time_ch[0]);
 //		OLED_ShowString(0,0,gps.time_ch);
