@@ -14,6 +14,7 @@
 #include "gps_nmea.h"
 #include "gps.h"
 #include "dbw_func.h"
+#include "plane_info.h"
 
 uint8_t	timer_flag1=0;
 uint8_t	timer_flag2=0;
@@ -60,6 +61,10 @@ int main(void)
 		OLED_ShowString(0,48,"HT:");
 		OLED_ShowString(80,48,"m");
 		OLED_ShowString(128,48,"FLIGHT NUM: 007");
+		OLED_ShowString(160,32,"P_I:");
+		
+		gps_impl_init();
+		plane_info_impl_init();
 
 //	t=' ';
 	while(1) 
@@ -72,11 +77,18 @@ int main(void)
 		*/
 		
 		GpsEvent(on_gps);
+//		PlaneInfoEvent();
 
 		OLED_ShowString(48,0,&gps.time_ch[0]);
 //		OLED_ShowString(0,0,gps.time_ch);
 
 		OLED_ShowString(176,0,&gps.date_ch[0]);
+		gps.info_flag1=(plane_info_flag&0x0f)+'0';
+		gps.info_flag2=((plane_info_flag&0xf0)>>4)+'0';
+//		OLED_ShowString(216,32,&gps.lon_ch[0]);
+		OLED_ShowChar(200,16,gps.info_flag1,16,1);
+		OLED_ShowChar(216,16,gps.info_flag2,16,1);
+		
 		if(gps_nmea.pos_available)
 		{
 			OLED_ShowString(32,16,&gps.lat_ch[0]);

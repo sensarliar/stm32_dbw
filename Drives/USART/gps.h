@@ -70,8 +70,9 @@ struct GpsState {
 	char EorW;
 	char alt_ch[12];
 	char date_ch[12];
-
-	
+	char info_flag1;
+	char info_flag2;
+/*	
 //  struct EcefCoor_i ecef_pos;    ///< position in ECEF in cm
 //  struct LlaCoor_i lla_pos;      ///< position in LLA (lat,lon: deg*1e7; alt: mm over ellipsoid)
 //  struct UtmCoor_i utm_pos;      ///< position in UTM (north,east: cm; alt: mm over ellipsoid)
@@ -98,6 +99,7 @@ struct GpsState {
   uint32_t last_msg_ticks;       ///< cpu time ticks at last received GPS message
   uint32_t last_msg_time;        ///< cpu time in sec at last received GPS message
   uint16_t reset;                ///< hotstart, warmstart, coldstart
+	*/
 };
 
 /** data structure for GPS time sync */
@@ -122,14 +124,14 @@ extern void gps_impl_init(void);
 #ifndef GPS_TIMEOUT
 #define GPS_TIMEOUT 2
 #endif
-
+/*
 static bool_t GpsIsLost(void) {
   if (gps.fix == GPS_FIX_3D) {
     return FALSE;
   }
   return TRUE;
 }
-
+*/
 
 
 /** Periodic GPS check.

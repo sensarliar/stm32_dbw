@@ -300,7 +300,7 @@ void parse_nmea_GPGGA(void) {
     }
   }
   // get number of satellites used in GPS solution
-  gps.num_sv = atoi(&gps_nmea.msg_buf[i]);
+//  gps.num_sv = atoi(&gps_nmea.msg_buf[i]);
   NMEA_PRINT("p_GPGGA() - gps_numSatlitesUsed=%i\n\r", gps.num_sv);
 
   while(gps_nmea.msg_buf[i++] != ',') {              // next field: HDOP (horizontal dilution of precision)

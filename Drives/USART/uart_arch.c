@@ -173,7 +173,7 @@ void uart3_init( void ) {
 
   uart_periph_init(&uart3);
   uart3.reg_addr = (void *)USART3;
-	COM_Init(COM3, 115200);//串口初始化
+	COM_Init(COM3, 9600);//串口初始化
 }
 
 
