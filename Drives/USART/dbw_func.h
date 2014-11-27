@@ -1,7 +1,7 @@
 
 #include "inc_types.h"
 
-#define DBW_LINK UART1
+#define DBW_LINK UART2
 	// HoTT serial send buffer pointer
 
 extern uint8_t *hott_msg_ptr;

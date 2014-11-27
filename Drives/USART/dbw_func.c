@@ -4,7 +4,7 @@
 #include "uart_arch.h"
 #include "plane_info.h"
 
-#define DBW_LINK UART1
+//#define DBW_LINK UART1
 	// HoTT serial send buffer pointer
 uint8_t *hott_msg_ptr = 0;
 // Len of HoTT serial buffer
@@ -16,7 +16,8 @@ uint8_t INFO_LEN[2]={0x33,0x34};  //2B
 uint8_t INFO_ADDR[4]={0x04,0xE6,0x10};//321040  addr 3B
 //uint8_t MSG_TX_FLAG=0B01000110;     //1B
 uint8_t MSG_TX_FLAG=0x46;     //1B
-uint8_t MSG_TX_ADDR[4]={0x04,0xE6,0x10};//321040  TX addr   //3B
+//uint8_t MSG_TX_ADDR[4]={0x04,0xE6,0x10};//321040  TX addr   //3B
+uint8_t MSG_TX_ADDR[4]={0x04,0x73,0xEE};//291822  TX addr   //3B
 uint8_t MSG_TX_LEN[2]={0x00,0x00};      //2B
 uint8_t MSG_TX_ACK=0x00;               //1B
 uint8_t MSG_TX[211]="gaoming";    //1680bit maxium   NON-MIL 628BIT  78B   17B+MSG +1CRC

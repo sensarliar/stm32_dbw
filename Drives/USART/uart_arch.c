@@ -140,7 +140,7 @@ void uart1_init( void ) {
   uart_periph_init(&uart1);
   uart1.reg_addr = (void *)USART1;
 //	COM_Init(COM1, 115200);//串口初始化
-	COM_Init(COM1, 115200);//串口初始化
+	COM_Init(COM1, 9600);//串口初始化
 	
 }
 
@@ -157,7 +157,7 @@ void uart2_init( void ) {
 
   uart_periph_init(&uart2);
   uart2.reg_addr = (void *)USART2;
-	COM_Init(COM2, 9600);//串口初始化
+	COM_Init(COM2, 115200);//串口初始化
 }
 
 void usart2_isr(void) { usart_isr(&uart2); }

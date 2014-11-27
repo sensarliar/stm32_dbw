@@ -589,6 +589,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Drives\USART\plane_info.c</FilePath>
             </File>
+            <File>
+              <FileName>dbw_rd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Drives\USART\dbw_rd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

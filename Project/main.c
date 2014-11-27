@@ -15,11 +15,14 @@
 #include "gps.h"
 #include "dbw_func.h"
 #include "plane_info.h"
+#include "dbw_rd.h"
 
 uint8_t	timer_flag1=0;
 uint8_t	timer_flag2=0;
 uint8_t sec_num_temp = 0;
 uint8_t sec_cmp_base = 33;
+
+char RCV_CMD[255];
 
 struct GpsState gps;
 //#define USE_UART1 1
@@ -61,10 +64,12 @@ int main(void)
 		OLED_ShowString(0,48,"HT:");
 		OLED_ShowString(80,48,"m");
 		OLED_ShowString(128,48,"FLIGHT NUM: 007");
-		OLED_ShowString(160,16,"P_I:");
+		OLED_ShowString(160,16,"Pinfo:");
+		OLED_ShowString(160,32,"CMD:");
 		
 		gps_impl_init();
 		plane_info_impl_init();
+		dbw_info_impl_init();
 
 //	t=' ';
 	while(1) 
@@ -78,6 +83,7 @@ int main(void)
 		
 		GpsEvent(on_gps);
 		PlaneInfoEvent();
+		DbwInfoEvent();
 
 		
 		if(gps_nmea.pos_available)
@@ -141,8 +147,11 @@ int main(void)
 		gps.info_flag1=(plane_info_flag&0x0f)+'0';
 		gps.info_flag2=((plane_info_flag&0xf0)>>4)+'0';
 //		OLED_ShowString(216,32,&gps.lon_ch[0]);
-		OLED_ShowChar(200,16,gps.info_flag1,16,1);
-		OLED_ShowChar(216,16,gps.info_flag2,16,1);
+		OLED_ShowChar(216,16,gps.info_flag1,16,1);
+		OLED_ShowChar(232,16,gps.info_flag2,16,1);
+		
+		RCV_CMD[5] = '\0';
+		OLED_ShowString(200,32,&RCV_CMD[0]);
 		
 		if(gps_nmea.pos_available)
 		{
