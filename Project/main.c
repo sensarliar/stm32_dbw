@@ -21,12 +21,15 @@ uint8_t	timer_flag1=0;
 uint8_t	timer_flag2=0;
 uint8_t sec_num_temp = 0;
 uint8_t sec_cmp_base = 33;
+uint8_t temp_x;
 
 char RCV_CMD[255];
 
 struct GpsState gps;
 //#define USE_UART1 1
 extern uint8_t timer_60s_flag;
+uint8_t cmd_rcv_flag=0;
+uint16_t cmd_ch_num = 0;
 
 
 /**
@@ -59,10 +62,10 @@ int main(void)
 
 		OLED_ShowString(0,0,"Time:");
 		OLED_ShowString(136,0,"Date:");
-		OLED_ShowString(0,16,"JD:");
-		OLED_ShowString(0,32,"WD:");
+		OLED_ShowString(0,16,"WD:");
+		OLED_ShowString(0,32,"JD:");
 		OLED_ShowString(0,48,"HT:");
-		OLED_ShowString(80,48,"m");
+		OLED_ShowString(96,48,"m");
 		OLED_ShowString(128,48,"FLIGHT NUM: 007");
 		OLED_ShowString(160,16,"Pinfo:");
 		OLED_ShowString(160,32,"CMD:");
@@ -150,9 +153,27 @@ int main(void)
 		OLED_ShowChar(216,16,gps.info_flag1,16,1);
 		OLED_ShowChar(232,16,gps.info_flag2,16,1);
 		
-		RCV_CMD[5] = '\0';
-		OLED_ShowString(200,32,&RCV_CMD[0]);
-		
+		if(cmd_rcv_flag)
+		{
+			temp_x=0x0d;
+			uart_transmit(&uart3, temp_x);
+			temp_x=0x0a;
+			uart_transmit(&uart3, temp_x);	
+			for(i=0;i<cmd_ch_num;i++)
+			{
+				uart_transmit(&uart3, RCV_CMD[i]);
+			}
+			temp_x=0x0d;
+			uart_transmit(&uart3, temp_x);
+			temp_x=0x0a;
+			uart_transmit(&uart3, temp_x);	
+			
+			RCV_CMD[7] = '\0';
+			OLED_ShowString(200,32,"       ");
+			OLED_ShowString(200,32,&RCV_CMD[0]);
+			cmd_rcv_flag = 0;
+			
+		}
 		if(gps_nmea.pos_available)
 		{
 			OLED_ShowString(32,16,&gps.lat_ch[0]);
@@ -164,12 +185,17 @@ int main(void)
 		{
 			OLED_ShowString(32,16,"               ");
 			OLED_ShowString(32,32,"               ");
-			OLED_ShowString(32,48,"     ");
+			OLED_ShowString(32,48,"       ");
 		}
 
 		OLED_Refresh_Gram();
 //		LED = !LED;
-		
+/*		
+	temp_x=0x34;
+	uart_transmit(&uart3, temp_x);
+	temp_x=0x36;
+	uart_transmit(&uart3, temp_x);	
+*/		
 	}	
 
 }

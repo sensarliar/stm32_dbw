@@ -24,6 +24,8 @@ struct DbwInfo dbw_info;
 uint8_t dbw_info_flag = 0x39;
 extern uint8_t INFO_ADDR[4];
 extern char RCV_CMD[255];
+extern uint8_t cmd_rcv_flag;
+extern uint16_t cmd_ch_num;
 
 
 
@@ -86,7 +88,9 @@ void parse_dbw_info_GM002(void) {
 	{
 		RCV_CMD[j] = dbw_info.msg_buf[19+j];
 	}
-	
+	RCV_CMD[j]='\0';
+	cmd_ch_num=j;
+	cmd_rcv_flag = 1;
 
 
 	
@@ -161,6 +165,8 @@ void dbw_info_parse_char( uint8_t c ) {
 		{
       dbw_info.msg_buf[0] = c;
       dbw_info.msg_len =1;   
+			dbw_info.set_len = DBW_MAXLEN-1;
+			dbw_info.set_temp_len = DBW_MAXLEN-1;
 		}
 
   }

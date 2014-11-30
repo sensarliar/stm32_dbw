@@ -132,13 +132,14 @@ void send_one_frame_data(void) {
 //      msg_crc = msg_crc  *hott_msg_ptr;
 			msg_crc ^= *hott_msg_ptr;
 
-      uart_transmit(&uart1, *hott_msg_ptr++);
+      uart_transmit(&uart2, *hott_msg_ptr++);
 				
     } else
-      uart_transmit(&uart1, (int8_t)msg_crc);
+      uart_transmit(&uart2, (int8_t)msg_crc);
 	}	
 	temp=0x0d;
-	uart_transmit(&uart1, temp);
+	uart_transmit(&uart2, temp);
 	temp=0x0a;
-	uart_transmit(&uart1, temp);	
+	uart_transmit(&uart2, temp);	
+
 }
