@@ -16,14 +16,19 @@
 
 #endif
 
-#define FLAG_FDJ_BIT 0
-#define FLAG_WQ_BIT 1
+#define FLAG_FDJ_BIT 1
+#define FLAG_WQ_BIT 5
 #define FLAG_QLJ_BIT 2
-#define FLAG_JY_BIT 5
+#define FLAG_JY_BIT 0
 
 
 struct PlaneInfo plane_info;
-uint8_t plane_info_flag = 0x39;
+uint8_t plane_info_flag = 0x19;
+
+extern char flight_num_char[10];
+extern uint8_t angle_roll[10];
+extern uint8_t angle_pitch[10];
+extern uint8_t angle_yaw[10];
 
 
 
@@ -46,17 +51,29 @@ void plane_info_impl_init( void ) {
  */
 void parse_plane_info_GM001(void) {
   int i = 6;     // current position in the message, start after: GPGGA,
+	int j = 0;
 
   if(plane_info.msg_buf[i]==',' && plane_info.msg_buf[i+1]==',') {
     NMEA_PRINT("p_GPGGA() - skipping empty message\n\r");
     return;
   }
 
+	  j=0;
+  while(plane_info.msg_buf[i++] != ',') {              // next field: time
+    if (i >= plane_info.msg_len) {
+      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
+      return;
+    }
+    flight_num_char[j++]=plane_info.msg_buf[i-1];
+  }
+  flight_num_char[j]='\0';
+	
   if( (plane_info.msg_buf[i] != '0') && (plane_info.msg_buf[i] != ',') )  {
    // plane_info.pos_available = TRUE;
 		plane_info_flag = plane_info_flag | (1<<FLAG_FDJ_BIT);
     NMEA_PRINT("p_GPGGA() - POS_AVAILABLE == TRUE\n\r");
   } else {
+		
   //  plane_info.pos_available = FALSE;
 		plane_info_flag = plane_info_flag & ~(1<<FLAG_FDJ_BIT);
     NMEA_PRINT("p_GPGGA() - gps_pos_available == false\n\r");
@@ -85,34 +102,37 @@ void parse_plane_info_GM001(void) {
       return;
     }
   }	
-	
-  if( (plane_info.msg_buf[i] != '0') && (plane_info.msg_buf[i] != ',') )  {
-   // plane_info.pos_available = TRUE;
-		plane_info_flag = plane_info_flag | (1<<FLAG_QLJ_BIT);
-    NMEA_PRINT("p_GPGGA() - POS_AVAILABLE == TRUE\n\r");
-  } else {
-  //  plane_info.pos_available = FALSE;
-		plane_info_flag = plane_info_flag & (~(1<<FLAG_QLJ_BIT));
-    NMEA_PRINT("p_GPGGA() - gps_pos_available == false\n\r");
-  }
 
-	
-	  while(plane_info.msg_buf[i++] != ',') {              // next field: satellites used
+		  j=0;
+  while(plane_info.msg_buf[i++] != ',') {              // next field: time
     if (i >= plane_info.msg_len) {
-      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r\r");
+      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
       return;
     }
-  }	
-	
-  if( (plane_info.msg_buf[i] != '0') && (plane_info.msg_buf[i] != ',') )  {
-   // plane_info.pos_available = TRUE;
-		plane_info_flag = plane_info_flag | (1<<FLAG_JY_BIT);
-    NMEA_PRINT("p_GPGGA() - POS_AVAILABLE == TRUE\n\r");
-  } else {
-  //  plane_info.pos_available = FALSE;
-		plane_info_flag = plane_info_flag & (~(1<<FLAG_JY_BIT));
-    NMEA_PRINT("p_GPGGA() - gps_pos_available == false\n\r");
+    angle_roll[j++]=plane_info.msg_buf[i-1];
   }
+  angle_roll[j]='\0';
+	
+			  j=0;
+  while(plane_info.msg_buf[i++] != ',') {              // next field: time
+    if (i >= plane_info.msg_len) {
+      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
+      return;
+    }
+    angle_pitch[j++]=plane_info.msg_buf[i-1];
+  }
+  angle_pitch[j]='\0';
+	
+			  j=0;
+  while(plane_info.msg_buf[i++] != ',') {              // next field: time
+    if (i >= plane_info.msg_len) {
+      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
+      return;
+    }
+    angle_yaw[j++]=plane_info.msg_buf[i-1];
+  }
+  angle_yaw[j]='\0';
+	
 //END parse GGA
 }
 

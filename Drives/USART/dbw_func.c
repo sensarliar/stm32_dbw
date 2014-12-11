@@ -21,9 +21,12 @@ uint8_t MSG_TX_ADDR[4]={0x04,0x73,0xEE};//291822  TX addr   //3B
 uint8_t MSG_TX_LEN[2]={0x00,0x00};      //2B
 uint8_t MSG_TX_ACK=0x00;               //1B
 uint8_t MSG_TX[211]="gaoming";    //1680bit maxium   NON-MIL 628BIT  78B   17B+MSG +1CRC
-uint16_t msg_num=3+1+9+11+12+5+6+1+1;
+uint16_t msg_num=9+11+12+5+6+1+1;  //neirong
 
-uint8_t flight_num_char[5]="007";
+extern char flight_num_char[10];
+uint8_t angle_roll[10]="0";
+uint8_t angle_pitch[10]="0";
+uint8_t angle_yaw[10]="0";
 
 uint8_t ALL_HEAD[18];
 extern struct GpsState gps;
@@ -31,11 +34,8 @@ extern struct GpsState gps;
 
 void fill_msg(void){
 		  int i,j;
-			for(i=0,j=0; i<3; i++,j++){
-			MSG_TX[i]=flight_num_char[j];
-			}
-			MSG_TX[i]=plane_info_flag;
-			i++;
+			msg_num=9+11+12+5+6+1+1;
+			i=0;
 			for(j=0; j<9; i++,j++){
 			MSG_TX[i]=gps.time_ch[j];
 			}
@@ -55,6 +55,69 @@ void fill_msg(void){
 			for(j=0; j<6; i++,j++){
 			MSG_TX[i]=gps.date_ch[j];
 			}
+			
+			j=0;
+			while(gps.speed_ch[j])
+			{
+				MSG_TX[i++]=gps.speed_ch[j++];
+			}
+
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			
+			j=0;
+			while(flight_num_char[j])
+			{
+				MSG_TX[i++]=flight_num_char[j++];
+			}
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			MSG_TX[i]=plane_info_flag;
+			i++;
+			
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			j=0;
+			while(angle_roll[j])
+			{
+				MSG_TX[i++]=angle_roll[j++];
+			}
+
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			j=0;
+			while(angle_pitch[j])
+			{
+				MSG_TX[i++]=angle_pitch[j++];
+			}
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			j=0;
+			while(angle_yaw[j])
+			{
+				MSG_TX[i++]=angle_yaw[j++];
+			}
+			MSG_TX[i]=',';
+			i++;
+			j++;
+			msg_num += j;
+			
+			
 			///bytes num =3+1+9+11+12+5+6+1+1
 }
 

@@ -69,6 +69,7 @@ struct GpsState {
 	char lon_du_ch[12];
 	char EorW;
 	char alt_ch[12];
+	char speed_ch[12];
 	char date_ch[12];
 	char info_flag1;
 	char info_flag2;

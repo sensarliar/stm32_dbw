@@ -135,18 +135,26 @@ void parse_nmea_GPRMC(void) {
   // get speed
 //  double speed = strtod(&gps_nmea.msg_buf[i], &endptr);
 //  gps.gspeed = speed * 1.852 * 100 / (60*60);
+			  j=0;
   NMEA_PRINT("p_GPRMC() - ground-speed=%d knot = %d cm/s\n\r", (speed*1000), (gps.gspeed*1000));
-  while(gps_nmea.msg_buf[i++] != ',') {              // next field: course
+  while(gps_nmea.msg_buf[i++] != ',') {              // next field: speed
     if (i >= gps_nmea.msg_len) {
       NMEA_PRINT("p_GPRMC() - skipping incomplete message\n\r");
       return;
     }
+		gps.speed_ch[j++]=gps_nmea.msg_buf[i-1];
   }
+	  gps.speed_ch[j]='\0';
+
+
+	
+	
+	
 //  double course = strtod(&gps_nmea.msg_buf[i], &endptr);
 //  gps.course = RadOfDeg(course) * 1e7;
   NMEA_PRINT("COURSE: %d \n\r",gps_course);
 	
-	  while(gps_nmea.msg_buf[i++] != ',') {              // next field: course
+	  while(gps_nmea.msg_buf[i++] != ',') {              // next field: trak true
     if (i >= gps_nmea.msg_len) {
       NMEA_PRINT("p_GPRMC() - skipping incomplete message\n\r");
       return;
@@ -155,7 +163,7 @@ void parse_nmea_GPRMC(void) {
 		//ddmmyy
 	
 	  j=0;
-  while(gps_nmea.msg_buf[i++] != ',') {              // next field: time
+  while(gps_nmea.msg_buf[i++] != ',') {              // next field: date
     if (i >= gps_nmea.msg_len) {
       NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
       return;

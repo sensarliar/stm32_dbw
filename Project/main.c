@@ -30,6 +30,7 @@ struct GpsState gps;
 extern uint8_t timer_60s_flag;
 uint8_t cmd_rcv_flag=0;
 uint16_t cmd_ch_num = 0;
+char flight_num_char[10]="007";
 
 
 /**
@@ -66,7 +67,7 @@ int main(void)
 		OLED_ShowString(0,32,"JD:");
 		OLED_ShowString(0,48,"HT:");
 		OLED_ShowString(96,48,"m");
-		OLED_ShowString(128,48,"FLIGHT NUM: 007");
+		OLED_ShowString(128,48,"FLIGHT NUM:");
 		OLED_ShowString(160,16,"Pinfo:");
 		OLED_ShowString(160,32,"CMD:");
 		
@@ -127,9 +128,9 @@ int main(void)
 	if(gps_nmea.pos_available&&(timer_flag1==1)&&(timer_flag2==1))
 		{
 
-
-				init_msg_head();
 			fill_msg();
+			init_msg_head();
+
 			hott_msg_ptr=ALL_HEAD;
 			send_one_frame_data();
 			timer_60s_flag=0;
@@ -152,6 +153,8 @@ int main(void)
 //		OLED_ShowString(216,32,&gps.lon_ch[0]);
 		OLED_ShowChar(216,16,gps.info_flag1,16,1);
 		OLED_ShowChar(232,16,gps.info_flag2,16,1);
+		OLED_ShowString(224,48,"    ");		
+		OLED_ShowString(224,48,&flight_num_char[0]);
 		
 		if(cmd_rcv_flag)
 		{
