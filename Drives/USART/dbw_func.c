@@ -27,6 +27,7 @@ extern char flight_num_char[10];
 uint8_t angle_roll[10]="0";
 uint8_t angle_pitch[10]="0";
 uint8_t angle_yaw[10]="0";
+uint8_t dev_state=0x80;
 
 uint8_t ALL_HEAD[18];
 extern struct GpsState gps;
@@ -76,10 +77,11 @@ void fill_msg(void){
 			MSG_TX[i]=',';
 			i++;
 			j++;
-			msg_num += j;
+	//		msg_num += j;
 			
 			MSG_TX[i]=plane_info_flag;
 			i++;
+			j++;
 			
 			MSG_TX[i]=',';
 			i++;

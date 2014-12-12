@@ -66,14 +66,23 @@ int main(void)
 		OLED_ShowString(0,16,"WD:");
 		OLED_ShowString(0,32,"JD:");
 		OLED_ShowString(0,48,"HT:");
-		OLED_ShowString(96,48,"m");
-		OLED_ShowString(128,48,"FLIGHT NUM:");
-		OLED_ShowString(160,16,"Pinfo:");
-		OLED_ShowString(160,32,"CMD:");
+		OLED_ShowString(80,48,"m");
+		OLED_ShowString(136,48,"PLANE NUM:");
+		OLED_ShowString(136,16,"Pinfo:");
+		OLED_ShowString(136,32,"CMD:");
 		
 		gps_impl_init();
 		plane_info_impl_init();
 		dbw_info_impl_init();
+//		gps.date_ch("111114");
+	gps.date_ch[0]='0';
+	gps.date_ch[1]='0';
+	gps.date_ch[2]='0';
+	gps.date_ch[3]='0';
+	gps.date_ch[4]='0';
+	gps.date_ch[5]='0';
+	gps.date_ch[6]='\0';
+	
 
 //	t=' ';
 	while(1) 
@@ -144,17 +153,17 @@ int main(void)
 
 		trans_disp_format();
 
-		OLED_ShowString(40,0,&gps.time_disp[0]);
+		OLED_ShowString(48,0,&gps.time_disp[0]);
 //		OLED_ShowString(0,0,gps.time_ch);
 
 		OLED_ShowString(176,0,&gps.date_disp[0]);
 		gps.info_flag1=(plane_info_flag&0x0f)+'0';
 		gps.info_flag2=((plane_info_flag&0xf0)>>4)+'0';
 //		OLED_ShowString(216,32,&gps.lon_ch[0]);
-		OLED_ShowChar(216,16,gps.info_flag1,16,1);
-		OLED_ShowChar(232,16,gps.info_flag2,16,1);
-		OLED_ShowString(224,48,"    ");		
-		OLED_ShowString(224,48,&flight_num_char[0]);
+		OLED_ShowChar(200,16,gps.info_flag1,16,1);
+		OLED_ShowChar(216,16,gps.info_flag2,16,1);
+		OLED_ShowString(224,48,"     ");		
+		OLED_ShowString(216,48,&flight_num_char[0]);
 		
 		if(cmd_rcv_flag)
 		{
@@ -166,29 +175,30 @@ int main(void)
 			{
 				uart_transmit(&uart3, RCV_CMD[i]);
 			}
+/*
 			temp_x=0x0d;
 			uart_transmit(&uart3, temp_x);
 			temp_x=0x0a;
 			uart_transmit(&uart3, temp_x);	
-			
-			RCV_CMD[7] = '\0';
-			OLED_ShowString(200,32,"       ");
-			OLED_ShowString(200,32,&RCV_CMD[0]);
+*/		
+			RCV_CMD[12] = '\0';
+			OLED_ShowString(168,32,"           ");
+			OLED_ShowString(168,32,&RCV_CMD[1]);
 			cmd_rcv_flag = 0;
 			
 		}
 		if(gps_nmea.pos_available)
 		{
-			OLED_ShowString(32,16,&gps.lat_ch[0]);
-			OLED_ShowString(32,32,&gps.lon_ch[0]);
+			OLED_ShowString(32,16,&gps.lat_disp[0]);
+			OLED_ShowString(24,32,&gps.lon_disp[0]);
 			OLED_ShowString(32,48,&gps.alt_ch[0]);
-			OLED_ShowChar(128,16,gps.NorS,16,1);
-			OLED_ShowChar(136,32,gps.EorW,16,1);
+			OLED_ShowChar(120,16,gps.NorS,16,1);
+			OLED_ShowChar(120,32,gps.EorW,16,1);
 		}else
 		{
-			OLED_ShowString(32,16,"               ");
-			OLED_ShowString(32,32,"               ");
-			OLED_ShowString(32,48,"       ");
+			OLED_ShowString(32,16,"             ");
+			OLED_ShowString(32,32,"             ");
+			OLED_ShowString(32,48,"     ");
 		}
 
 		OLED_Refresh_Gram();

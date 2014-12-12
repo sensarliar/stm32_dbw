@@ -75,6 +75,8 @@ struct GpsState {
 	char info_flag2;
 	char time_disp[16];
 	char date_disp[16];
+	char lat_disp[16];
+	char lon_disp[16];
 /*	
 //  struct EcefCoor_i ecef_pos;    ///< position in ECEF in cm
 //  struct LlaCoor_i lla_pos;      ///< position in LLA (lat,lon: deg*1e7; alt: mm over ellipsoid)

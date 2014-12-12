@@ -428,6 +428,7 @@ void nmea_parse_char( uint8_t c ) {
 void trans_disp_format(void)
 {
 	uint8_t hour_temp=0;
+	uint8_t i;
 	if((gps.time_ch[0]>='0')&&(gps.time_ch[0]<='9')&&(gps.time_ch[1]>='0')&&(gps.time_ch[1]<='9'))
 	{
 		hour_temp = (gps.time_ch[0]-'0')*10+(gps.time_ch[1]-'0');
@@ -445,11 +446,39 @@ void trans_disp_format(void)
 		gps.time_disp[6] = gps.time_ch[4];
 		gps.time_disp[7] = gps.time_ch[5];
 
-		gps.time_disp[8] = gps.time_ch[6];
-		gps.time_disp[9] = gps.time_ch[7];
+//		gps.time_disp[8] = gps.time_ch[6];
+//		gps.time_disp[9] = gps.time_ch[7];
 		
-		gps.time_disp[10] = gps.time_ch[8];
-		gps.time_disp[11] = '\0';;
+//		gps.time_disp[10] = gps.time_ch[8];
+		gps.time_disp[8] = '\0';
+		
+
+		for(i=0;i<7;i++)
+		{
+			gps.lat_disp[9-i]=gps.lat_ch[8-i];
+		}
+		
+		gps.lat_disp[2] = ' ';
+		gps.lat_disp[1] = gps.lat_ch[1];
+		gps.lat_disp[0] = gps.lat_ch[0];
+		gps.lat_disp[10] = ((' ')+7);
+		gps.lat_disp[11] = '\0';
+	
+		for(i=0;i<7;i++)
+		{
+			gps.lon_disp[10-i]=gps.lon_ch[9-i];
+		}
+		
+		gps.lon_disp[3] = ' ';
+		gps.lon_disp[2] = gps.lon_ch[2];
+		gps.lon_disp[1] = gps.lon_ch[1];
+		gps.lon_disp[0] = gps.lon_ch[0];
+		gps.lon_disp[11] = ((' ')+7);
+		gps.lon_disp[12] = '\0';
+		
+	//	gps.lon_ch[10] = '\0';
+		gps.alt_ch[5] = '\0';
+		
 	}
 
 	gps.date_disp[0] = '2';

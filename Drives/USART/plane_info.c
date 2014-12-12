@@ -18,17 +18,20 @@
 
 #define FLAG_FDJ_BIT 1
 #define FLAG_WQ_BIT 5
-#define FLAG_QLJ_BIT 2
-#define FLAG_JY_BIT 0
+#define FLAG_DEV1_BIT 0
+#define FLAG_DEV2_BIT 2
+#define FLAG_DEV3_BIT 4
+
 
 
 struct PlaneInfo plane_info;
-uint8_t plane_info_flag = 0x19;
+uint8_t plane_info_flag = 0x40;
 
 extern char flight_num_char[10];
 extern uint8_t angle_roll[10];
 extern uint8_t angle_pitch[10];
 extern uint8_t angle_yaw[10];
+extern uint8_t dev_state;
 
 
 
@@ -132,6 +135,39 @@ void parse_plane_info_GM001(void) {
     angle_yaw[j++]=plane_info.msg_buf[i-1];
   }
   angle_yaw[j]='\0';
+	
+	j=0;
+  while(plane_info.msg_buf[i++] != ',') {              // next field: time
+    if (i >= plane_info.msg_len) {
+      NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
+      return;
+    }
+    dev_state=plane_info.msg_buf[i-1];
+  }
+ // angle_yaw[j]='\0';
+	if(dev_state&0x1)
+	{
+			plane_info_flag = plane_info_flag | (1<<FLAG_DEV1_BIT);
+	}else
+	{
+			plane_info_flag = plane_info_flag & ~(1<<FLAG_DEV1_BIT);
+	}
+	
+		if(dev_state&0x2)
+	{
+			plane_info_flag = plane_info_flag | (1<<FLAG_DEV2_BIT);
+	}else
+	{
+			plane_info_flag = plane_info_flag & ~(1<<FLAG_DEV2_BIT);
+	}
+	
+		if(dev_state&0x4)
+	{
+			plane_info_flag = plane_info_flag | (1<<FLAG_DEV3_BIT);
+	}else
+	{
+			plane_info_flag = plane_info_flag & ~(1<<FLAG_DEV3_BIT);
+	}
 	
 //END parse GGA
 }
