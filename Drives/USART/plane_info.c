@@ -51,9 +51,10 @@ void plane_info_impl_init( void ) {
 /**
  * parse GPGGA-nmea-messages stored in
  * plane_info.msg_buf .
+ * $GMING,0007,1,0,12.61,6.82,87.21,M,
  */
 void parse_plane_info_GM001(void) {
-  int i = 6;     // current position in the message, start after: GPGGA,
+  int i = 6;     // current position in the message, start after: GMING,
 	int j = 0;
 
   if(plane_info.msg_buf[i]==',' && plane_info.msg_buf[i+1]==',') {
@@ -62,7 +63,7 @@ void parse_plane_info_GM001(void) {
   }
 
 	  j=0;
-  while(plane_info.msg_buf[i++] != ',') {              // next field: time
+  while(plane_info.msg_buf[i++] != ',') {              // next field: FLIGHT NUM 0007
     if (i >= plane_info.msg_len) {
       NMEA_PRINT("p_GPGGA() - skipping incomplete message\n\r");
       return;
@@ -73,7 +74,7 @@ void parse_plane_info_GM001(void) {
 	
   if( (plane_info.msg_buf[i] != '0') && (plane_info.msg_buf[i] != ',') )  {
    // plane_info.pos_available = TRUE;
-		plane_info_flag = plane_info_flag | (1<<FLAG_FDJ_BIT);
+		plane_info_flag = plane_info_flag | (1<<FLAG_FDJ_BIT);///HERE IS BUG
     NMEA_PRINT("p_GPGGA() - POS_AVAILABLE == TRUE\n\r");
   } else {
 		
@@ -177,6 +178,7 @@ void parse_plane_info_GM001(void) {
  * parse_nmea_char() has a complete line.
  * Find out what type of message it is and
  * hand it to the parser for that type.
+ * define the protocal startwith $GMING,345,23,23,5,4,5,
  */
 void plane_info_parse_msg( void ) {
 
