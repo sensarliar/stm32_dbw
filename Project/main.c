@@ -31,6 +31,7 @@ extern uint8_t timer_60s_flag;
 uint8_t cmd_rcv_flag=0;
 uint16_t cmd_ch_num = 0;
 char flight_num_char[10]="007";
+char U3_SEND_HEAD[10]="$MSG01,";
 
 
 /**
@@ -164,6 +165,7 @@ int main(void)
 		OLED_ShowChar(216,16,gps.info_flag2,16,1);
 		OLED_ShowString(224,48,"     ");		
 		OLED_ShowString(216,48,&flight_num_char[0]);
+	
 		
 		if(cmd_rcv_flag)
 		{
@@ -171,10 +173,20 @@ int main(void)
 			uart_transmit(&uart3, temp_x);
 			temp_x=0x0a;
 			uart_transmit(&uart3, temp_x);	
+
+			for(i=0;i<7;i++)
+			{
+				uart_transmit(&uart3, U3_SEND_HEAD[i]);
+			}	
+			
 			for(i=0;i<cmd_ch_num;i++)
 			{
 				uart_transmit(&uart3, RCV_CMD[i]);
 			}
+			temp_x=',';
+			uart_transmit(&uart3, temp_x);	
+			temp_x='\n';
+			uart_transmit(&uart3, temp_x);	
 /*
 			temp_x=0x0d;
 			uart_transmit(&uart3, temp_x);

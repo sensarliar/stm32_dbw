@@ -363,6 +363,7 @@ void parse_nmea_GPGGA(void) {
  * hand it to the parser for that type.
  */
 void nmea_parse_msg( void ) {
+	int i;
 
   if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GNRMC", 5)) {
     gps_nmea.msg_buf[gps_nmea.msg_len] = 0;
@@ -373,8 +374,14 @@ void nmea_parse_msg( void ) {
   else {
     if(gps_nmea.msg_len > 5 && !strncmp(gps_nmea.msg_buf , "GNGGA", 5)) {
       gps_nmea.msg_buf[gps_nmea.msg_len] = 0;
-      NMEA_PRINT("parse_gps_msg() - parsing GGA gps-message \"%s\" \n\r",gps_nmea.msg_buf);
-      NMEA_PRINT("GGA");
+      //NMEA_PRINT("parse_gps_msg() - parsing GGA gps-message \"%s\" \n\r",gps_nmea.msg_buf);
+      //NMEA_PRINT("GGA");
+			uart_transmit(&uart3, '$');
+						for(i=0;i<gps_nmea.msg_len;i++)
+			{
+				uart_transmit(&uart3, gps_nmea.msg_buf[i]);
+			}
+			uart_transmit(&uart3, '\n');
       parse_nmea_GPGGA();
     }
     else {

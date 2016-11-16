@@ -356,8 +356,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>44</TopLine>
-      <CurrentLine>45</CurrentLine>
+      <TopLine>23</TopLine>
+      <CurrentLine>34</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -460,7 +460,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>218</TopLine>
+      <TopLine>219</TopLine>
       <CurrentLine>220</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\OLED\ug25664.c</PathWithFileName>
@@ -474,10 +474,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>37</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>169</TopLine>
+      <CurrentLine>174</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\USART\uart_arch.c</PathWithFileName>
       <FilenameWithoutPath>uart_arch.c</FilenameWithoutPath>
@@ -490,10 +490,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>29</ColumnNumber>
+      <ColumnNumber>64</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>237</TopLine>
-      <CurrentLine>238</CurrentLine>
+      <TopLine>141</TopLine>
+      <CurrentLine>139</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\USART\gps_nmea.c</PathWithFileName>
       <FilenameWithoutPath>gps_nmea.c</FilenameWithoutPath>
@@ -520,12 +520,12 @@
       <GroupNumber>2</GroupNumber>
       <FileNumber>11</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>36</ColumnNumber>
+      <ColumnNumber>18</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>17</TopLine>
-      <CurrentLine>18</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\USART\dbw_func.c</PathWithFileName>
       <FilenameWithoutPath>dbw_func.c</FilenameWithoutPath>
@@ -536,12 +536,12 @@
       <GroupNumber>2</GroupNumber>
       <FileNumber>12</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>39</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>36</TopLine>
+      <CurrentLine>180</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\USART\plane_info.c</PathWithFileName>
       <FilenameWithoutPath>plane_info.c</FilenameWithoutPath>
@@ -554,10 +554,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>9</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>51</TopLine>
-      <CurrentLine>53</CurrentLine>
+      <TopLine>79</TopLine>
+      <CurrentLine>92</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Drives\USART\dbw_rd.c</PathWithFileName>
       <FilenameWithoutPath>dbw_rd.c</FilenameWithoutPath>
