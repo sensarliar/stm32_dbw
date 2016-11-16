@@ -9,6 +9,10 @@ D:\stm32\work\test_oled
 飞机端配置本机地址为：uint8_t INFO_ADDR[4];
 地面站配置的sim卡号地址为：uint8_t MSG_TX_ADDR[4]；
 
+如果需要配置飞机号，请在程序中配置，
+在main.c程序中配置，
+char flight_num_char[10]="007";
+
 现在配置短报文dbw uart2的波特率为9600。测试正常。
 以后bdm910模块出厂后都用默认波特率9600.
 
